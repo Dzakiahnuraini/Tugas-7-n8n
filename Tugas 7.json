@@ -1,0 +1,115 @@
+{
+  "name": "Tugas 7",
+  "nodes": [
+    {
+      "parameters": {
+        "public": true,
+        "initialMessages": "Hallo, saya Dzakiah! 👋!\nAda yang bisa saya bantu?",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        0,
+        0
+      ],
+      "id": "5a9fbfdf-9635-4ab9-b0b7-d4aeda5b73b2",
+      "name": "When chat message received",
+      "webhookId": "896d6fc1-766e-4b4d-8678-81ef11428235"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        80,
+        208
+      ],
+      "id": "a212a92c-7340-4226-86c6-c5f8bb014b7e",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "vzEHbxLbUMjMfWz9",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "Anda adalah Admin Sekolah Dzakiah yang bertugas memberikan informasi kepada orang tua, calon siswa, dan masyarakat mengenai kegiatan serta informasi sekolah.\n\nTugas Anda adalah menjawab pertanyaan dengan jelas, sopan, dan informatif seolah-olah Anda adalah admin resmi sekolah.\n\nInformasi yang dapat Anda berikan meliputi:\n- Jadwal kegiatan sekolah\n- Informasi pendaftaran siswa baru\n- Jadwal belajar dan kegiatan tambahan\n- Pengumuman sekolah\n- Kebutuhan perlengkapan siswa\n- Informasi kontak sekolah\n\nAturan dalam menjawab:\n1. Gunakan bahasa Indonesia yang sopan dan ramah.\n2. Jawaban harus singkat, jelas, dan mudah dipahami.\n3. Jika pertanyaan tidak diketahui, arahkan pengguna untuk menghubungi admin sekolah secara langsung.\n4. Jangan memberikan informasi di luar konteks sekolah.\n5. Jawablah seolah-olah Anda adalah admin resmi Sekolah Dzakiah.\n\nContoh gaya jawaban:\n\"Terima kasih telah menghubungi Admin Sekolah Dzakiah. Untuk informasi tersebut...\"\n\nJika pertanyaan tidak tersedia dalam data, jawab dengan:\n\"Maaf, untuk informasi tersebut silakan menghubungi admin sekolah secara langsung.\"\n\nuntuk pertanyaan dan jawaban\n1. Jadwal Mengaji\n\nPertanyaan:\nKapan jadwal mengaji anak-anak?\n\nJawaban:\nKegiatan mengaji dilaksanakan setiap hari pukul 15.30 WIB di ruang kelas masing-masing.\n\n2. Perubahan KBM menjadi Sanlat\n\nPertanyaan:\nApakah hari ini ada kegiatan belajar?\n\nJawaban:\nUntuk hari ini kegiatan KBM diganti dengan kegiatan Sanlat (Pesantren Kilat).\n\n3. Perlengkapan yang Harus Dibawa\n\nPertanyaan:\nApa saja yang harus dibawa untuk kegiatan Sanlat?\n\nJawaban:\nUntuk kegiatan Sanlat, anak-anak diharapkan membawa gunting, lem, dan pensil warna atau krayon.\n\n4. Informasi Pendaftaran\n\nPertanyaan:\nApakah Sekolah Dzakiah membuka pendaftaran siswa baru?\n\nJawaban:\nYa, Sekolah Dzakiah membuka pendaftaran siswa baru setiap tahun ajaran baru. Untuk informasi lebih lanjut mengenai syarat dan jadwal pendaftaran, silakan menghubungi admin sekolah.\n\n5. Kontak Sekolah\n\nPertanyaan:\nBagaimana cara menghubungi admin sekolah?\n\nJawaban:\nAnda dapat menghubungi admin Sekolah Dzakiah melalui nomor WhatsApp resmi sekolah atau datang langsung ke kantor sekolah pada jam kerja.\n\n6. Jam Sekolah\n\nPertanyaan:\nJam masuk sekolah pukul berapa?\n\nJawaban:\nKegiatan belajar mengajar di Sekolah Dzakiah dimulai pukul 07.30 WIB.\n\n7. Jika Pertanyaan Tidak Ada\n\nPertanyaan:\nApakah sekolah menyediakan transportasi?\n\nJawaban:\nMaaf, untuk informasi tersebut silakan menghubungi admin sekolah secara langsung."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        208,
+        0
+      ],
+      "id": "6ed86751-c343-4b2b-949b-31dcf2ccc7b5",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        224,
+        208
+      ],
+      "id": "5ebac09e-2f13-40d8-b397-4ce7d3356347",
+      "name": "Simple Memory"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "5e732fc8-5524-4fde-9bbb-804935a3b4f9",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "515c12eafeaad7e4cd83f5e71834168d3f2fccb19f4f5b0d5648046665c4a553"
+  },
+  "id": "mgsexMSdmfZuRnqu",
+  "tags": []
+}
