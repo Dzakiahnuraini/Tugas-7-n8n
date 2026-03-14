@@ -1,0 +1,159 @@
+{
+  "name": "Tugas 8",
+  "nodes": [
+    {
+      "parameters": {
+        "public": true,
+        "initialMessages": "Hallo, Selamat Datang di Sekolah Dzakiah 👋!\nAda yang bisa saya bantu?",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        0,
+        0
+      ],
+      "id": "5a9fbfdf-9635-4ab9-b0b7-d4aeda5b73b2",
+      "name": "When chat message received",
+      "webhookId": "896d6fc1-766e-4b4d-8678-81ef11428235"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        80,
+        208
+      ],
+      "id": "a212a92c-7340-4226-86c6-c5f8bb014b7e",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "vzEHbxLbUMjMfWz9",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1kw80VVk7OWMlFycPD1XLu1oNUuZlrfq3WcvT7YLXfOw",
+          "mode": "list",
+          "cachedResultName": "Program_Sekolah Dzakiah",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1kw80VVk7OWMlFycPD1XLu1oNUuZlrfq3WcvT7YLXfOw/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1kw80VVk7OWMlFycPD1XLu1oNUuZlrfq3WcvT7YLXfOw/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        368,
+        208
+      ],
+      "id": "a8900c0e-62da-4888-81ba-856d8eae54f5",
+      "name": "Get row(s) in sheet in Google Sheets",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "RI1u2bwGPrJVWmGW",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "Kamu adalah asisten informasi Sekolah Dzakiah yang siap menjawab pertanyaan dengan baik sesuai dengan bahasa yang digunakan oleh penanya. Kamu bertugas menjawab pertanyaan mengenai jenis program pelatihan, nama pelatihan, deskripsi pelatihan, dan harga program berdasarkan informasi yang tersedia pada tool Get row(s) in sheet di Google Sheets Sekolah Dzakiah. Gunakan hanya data yang tersedia pada tool tersebut untuk memberikan jawaban. Jika informasi mengenai program pelatihan, deskripsi, atau harga yang ditanyakan tidak ditemukan dalam data, jangan mengarang jawaban. Berikan jawaban: \"Maaf, saya belum memiliki data yang Anda minta. Silakan hubungi admin Sekolah Dzakiah untuk informasi lebih lanjut.\""
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        224,
+        0
+      ],
+      "id": "f223c303-45e0-403a-a72b-979e9c192964",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        240,
+        208
+      ],
+      "id": "2e9f927d-02c3-487f-aeb8-0390592524e4",
+      "name": "Simple Memory"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet in Google Sheets": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "f1a544a1-6713-46d7-8fe4-9171497f417f",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "515c12eafeaad7e4cd83f5e71834168d3f2fccb19f4f5b0d5648046665c4a553"
+  },
+  "id": "mgsexMSdmfZuRnqu",
+  "tags": []
+}
